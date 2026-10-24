@@ -1,0 +1,611 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Meu Site de Notícias</title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- Ícones -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
+
+    <style>
+        :root {
+            --cor-principal: #263b80;
+            --cor-secundaria: #4968c8;
+            --cor-fundo: #f4f6fb;
+            --cor-texto: #263044;
+            --cor-branca: #ffffff;
+            --cor-borda: #e5e9f2;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--cor-fundo);
+            color: var(--cor-texto);
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* Cabeçalho */
+
+        header {
+            min-height: 82px;
+            padding: 16px 28px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            background: var(--cor-branca);
+            border-bottom: 1px solid var(--cor-borda);
+            box-shadow: 0 2px 10px rgba(30, 45, 80, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            width: 46px;
+            height: 46px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 14px;
+            background: var(--cor-principal);
+            color: white;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .titulo {
+            margin: 0;
+            font-size: 25px;
+            font-weight: 700;
+            flex: 1;
+        }
+
+        .menu-hamburguer {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--cor-borda);
+            border-radius: 12px;
+            color: var(--cor-principal);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .menu-hamburguer:hover {
+            background: #edf1ff;
+        }
+
+        /* Estrutura principal */
+
+        .layout {
+            display: flex;
+            min-height: calc(100vh - 82px);
+        }
+
+        /* Menu lateral */
+
+        nav {
+            width: 245px;
+            flex-shrink: 0;
+            padding: 25px 16px;
+            background: var(--cor-branca);
+            border-right: 1px solid var(--cor-borda);
+            transition: width 0.25s, padding 0.25s;
+        }
+
+        .menu-lateral {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .menu-lateral li {
+            margin-bottom: 8px;
+        }
+
+        .opcao {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            min-height: 48px;
+            padding: 12px;
+            border-radius: 10px;
+            color: #58647b;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .opcao:hover,
+        .opcao.ativa {
+            background: #edf1ff;
+            color: var(--cor-principal);
+        }
+
+        .icone-inicial {
+            width: 23px;
+            flex-shrink: 0;
+            text-align: center;
+            font-size: 17px;
+        }
+
+        .rotulo {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        .icone-final {
+            font-size: 12px;
+        }
+
+        /* Conteúdo das notícias */
+
+        main {
+            flex: 1;
+            min-width: 0;
+            padding: 32px;
+        }
+
+        .titulo-secao {
+            margin-bottom: 8px;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .subtitulo-secao {
+            margin-bottom: 28px;
+            color: #758096;
+        }
+
+        .grade-noticias {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 24px;
+        }
+
+        /* Cartões */
+
+        .cartao {
+            min-width: 0;
+            overflow: hidden;
+            background: var(--cor-branca);
+            border: 1px solid var(--cor-borda);
+            border-radius: 16px;
+            box-shadow: 0 5px 18px rgba(35, 50, 90, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .cartao:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(35, 50, 90, 0.10);
+        }
+
+        .imagem-do-cartao {
+            display: block;
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            background: #e7ebf5;
+        }
+
+        .corpo-do-cartao {
+            padding: 22px 22px 12px;
+        }
+
+        .titulo-do-cartao {
+            margin: 0 0 12px;
+            font-size: 23px;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .classificacao {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 14px;
+            font-size: 13px;
+        }
+
+        .categoria-da-noticia {
+            padding: 6px 10px;
+            border-radius: 20px;
+            background: #edf1ff;
+            color: var(--cor-principal);
+            font-weight: 600;
+        }
+
+        .data-da-noticia {
+            color: #778198;
+        }
+
+        .descricao-da-noticia {
+            margin-bottom: 16px;
+            color: #59647a;
+            line-height: 1.6;
+        }
+
+        .autor-da-noticia {
+            margin-bottom: 10px;
+            color: #7b8496;
+            font-size: 13px;
+        }
+
+        .botao-do-cartao {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 22px;
+            border-top: 1px solid var(--cor-borda);
+            color: var(--cor-principal);
+            font-size: 14px;
+            font-weight: 700;
+            transition: background 0.2s;
+        }
+
+        .botao-do-cartao:hover {
+            background: #f5f7ff;
+        }
+
+        /* Rodapé */
+
+        footer {
+            padding: 22px;
+            background: var(--cor-principal);
+            color: white;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        /* Menu recolhido */
+
+        body.menu-recolhido nav {
+            width: 78px;
+            padding-right: 10px;
+            padding-left: 10px;
+        }
+
+        body.menu-recolhido .opcao {
+            justify-content: center;
+            padding: 12px 8px;
+        }
+
+        body.menu-recolhido .rotulo,
+        body.menu-recolhido .icone-final {
+            display: none;
+        }
+
+        /* Responsividade */
+
+        @media (max-width: 900px) {
+            nav {
+                width: 210px;
+            }
+
+            main {
+                padding: 24px;
+            }
+
+            .grade-noticias {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            header {
+                min-height: 70px;
+                padding: 12px 16px;
+                gap: 12px;
+            }
+
+            .logo {
+                width: 40px;
+                height: 40px;
+            }
+
+            .titulo {
+                font-size: 19px;
+            }
+
+            .layout {
+                min-height: calc(100vh - 70px);
+            }
+
+            nav {
+                width: 70px;
+                padding: 18px 8px;
+            }
+
+            nav .opcao {
+                justify-content: center;
+                padding: 12px 8px;
+            }
+
+            nav .rotulo,
+            nav .icone-final {
+                display: none;
+            }
+
+            main {
+                padding: 20px 14px;
+            }
+
+            .titulo-secao {
+                font-size: 24px;
+            }
+
+            .imagem-do-cartao {
+                height: 190px;
+            }
+
+            .titulo-do-cartao {
+                font-size: 21px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div id="logoDoSite" class="logo">C</div>
+
+        <h1 class="titulo">Meu Site de Notícias</h1>
+
+        <button
+            type="button"
+            class="menu-hamburguer"
+            id="botaoMenu"
+            aria-label="Recolher ou expandir menu"
+            aria-expanded="true"
+        >
+            <i id="hamburguer" class="fa-solid fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="layout">
+        <nav id="menuLateral" aria-label="Menu principal">
+            <ul class="menu-lateral">
+                <li>
+                    <a href="#noticias" class="opcao ativa">
+                        <span class="icone-inicial">
+                            <i class="fa-solid fa-newspaper"></i>
+                        </span>
+                        <span class="rotulo">Notícias</span>
+                        <span class="icone-final">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="mailto:contato@exemplo.com" class="opcao">
+                        <span class="icone-inicial">
+                            <i class="fa-solid fa-envelope"></i>
+                        </span>
+                        <span class="rotulo">Mensagem</span>
+                        <span class="icone-final">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="./detalhe.html" class="opcao">
+                        <span class="icone-inicial">
+                            <i class="fa-solid fa-user"></i>
+                        </span>
+                        <span class="rotulo">Perfil</span>
+                        <span class="icone-final">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#" class="opcao" id="botaoSair">
+                        <span class="icone-inicial">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </span>
+                        <span class="rotulo">Sair</span>
+                        <span class="icone-final">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="./pricingBootstrap.html" class="opcao">
+                        <span class="icone-inicial">
+                            <i class="fa-solid fa-tags"></i>
+                        </span>
+                        <span class="rotulo">texto</span>
+                        <span class="icone-final">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <main id="noticias">
+            <h2 class="titulo-secao">texto</h2>
+            <p class="subtitulo-secao">
+                texto
+            </p>
+
+            <div class="grade-noticias">
+                <article class="cartao">
+                    <img
+                        class="imagem-do-cartao"
+                        src="./assets/img/.png"
+                        alt="texto"
+                    >
+
+                    <section class="corpo-do-cartao">
+                        <h3 class="titulo-do-cartao">teste</h3>
+
+                        <p class="classificacao">
+                            <span class="categoria-da-noticia">texto</span>
+                            <time class="data-da-noticia" datetime="2026-03-05">
+                                data
+                            </time>
+                        </p>
+
+                        <p class="descricao-da-noticia">
+                            texto.
+                        </p>
+
+                        <p class="autor-da-noticia">texto</p>
+                    </section>
+
+                    <a href="./detalhe.html" class="botao-do-cartao">
+                        <span>texto</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </a>
+                </article>
+
+                <article class="cartao">
+                    <img
+                        class="imagem-do-cartao"
+                    img
+                        alt="texto"
+                    >
+
+                    <section class="corpo-do-cartao">
+                        <h3 class="titulo-do-cartao">texto</h3>
+
+                        <p class="classificacao">
+                            <span class="categoria-da-noticia">texto</span>
+                            <time class="data-da-noticia" datetime="2026-08-24">
+                                data
+                            </time>
+                        </p>
+
+                        <p class="descricao-da-noticia">
+                            texto
+                        </p>
+
+                        <p class="autor-da-noticia">texto</p>
+                    </section>
+
+                    <a href="./detalhe.html" class="botao-do-cartao">
+                        <span>texto</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </a>
+                </article>
+
+                <article class="cartao">
+                    <img
+                        class="imagem-do-cartao"
+                        src="./assets/img/.png"
+                        alt="texto"
+                    >
+
+                    <section class="corpo-do-cartao">
+                        <h3 class="titulo-do-cartao">texto</h3>
+
+                        <p class="classificacao">
+                            <span class="categoria-da-noticia">texto</span>
+                            <time class="data-da-noticia" datetime="2026-03-05">
+                                data
+                            </time>
+                        </p>
+
+                        <p class="descricao-da-noticia">
+                            texto
+                        </p>
+
+                        <p class="autor-da-noticia">texto</p>
+                    </section>
+
+                    <a href="./detalhe.html" class="botao-do-cartao">
+                        <span>texto</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </a>
+                </article>
+
+                <article class="cartao">
+                    <img
+                        class="imagem-do-cartao"
+                        src="./assets/img/.png"
+                        alt="texto  "
+                    >
+
+                    <section class="corpo-do-cartao">
+                        <h3 class="titulo-do-cartao">texto</h3>
+
+                        <p class="classificacao">
+                            <span class="categoria-da-noticia">texto</span>
+                            <time class="data-da-noticia" datetime="2026-08-25">
+                                data
+                            </time>
+                        </p>
+
+                        <p class="descricao-da-noticia">
+                            texto.
+                        </p>
+
+                        <p class="autor-da-noticia">texto</p>
+                    </section>
+
+                    <a href="./detalhe.html" class="botao-do-cartao">
+                        <span>texto</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </a>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        &copy;  Notícias, 2026 😊
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const botaoMenu = document.getElementById("botaoMenu");
+        const iconeMenu = document.getElementById("hamburguer");
+
+        botaoMenu.addEventListener("click", function () {
+            document.body.classList.toggle("menu-recolhido");
+
+            const menuExpandido =
+                !document.body.classList.contains("menu-recolhido");
+
+            botaoMenu.setAttribute("aria-expanded", menuExpandido);
+            iconeMenu.className = menuExpandido
+                ? "fa-solid fa-bars"
+                : "fa-solid fa-bars";
+        });
+
+        document.getElementById("botaoSair").addEventListener("click", function (evento) {
+            evento.preventDefault();
+            alert("Você clicou em Sair.");
+        });
+    </script>
+</body>
+</html>
